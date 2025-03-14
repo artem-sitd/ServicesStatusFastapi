@@ -1,0 +1,28 @@
+version: '3.10'
+
+volumes:
+  postgres_data:
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: "app/Dockerfile"
+    container_name: "service-status"
+    env_file:
+      - ".env.docker"
+    restart: "always"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    container_name: "postgres"
+    image: postgres:latest
+    env_file:
+      - ".env.docker"
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
